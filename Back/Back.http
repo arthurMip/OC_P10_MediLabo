@@ -1,0 +1,11 @@
+@host_address = http://localhost:5242/api
+@docket_address = https://localhost:32771/api
+
+
+GET {{host_address }}/test
+Accept: application/json
+
+###
+
+GET {{docket_address}}/test
+Accept: aplication/json

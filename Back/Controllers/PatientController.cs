@@ -1,0 +1,86 @@
+﻿using Back.DTOs;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Back.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class PatientController : ControllerBase
+{
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        try
+        {
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        try
+        {
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpPost]
+    public IActionResult Create(CreatePatientDTO model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, CreatePatientDTO model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        try
+        {
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+}
