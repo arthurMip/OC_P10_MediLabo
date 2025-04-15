@@ -1,4 +1,5 @@
-﻿using Back.DTOs;
+﻿using Back.Models;
+using Back.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,8 +7,9 @@ namespace Back.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PatientController : ControllerBase
+public class PatientController(PatientService patientService) : ControllerBase
 {
+    private readonly PatientService patientService = patientService;
 
     [HttpGet]
     public IActionResult GetAll()
@@ -36,7 +38,7 @@ public class PatientController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreatePatientDTO model)
+    public IActionResult Create(CreatePatientRequest model)
     {
         try
         {
@@ -54,7 +56,7 @@ public class PatientController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, CreatePatientDTO model)
+    public IActionResult Update(int id, UpdatePatientRequest model)
     {
         try
         {

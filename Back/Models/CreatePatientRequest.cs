@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Back.Enums;
 
-namespace Back.DTOs;
+namespace Back.Models;
 
-public class CreatePatientDTO
+public class CreatePatientRequest
 {
     [Required]
     public string Firstname { get; set; } = string.Empty;

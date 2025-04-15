@@ -1,5 +1,6 @@
 using Back.Data;
 using Back.Data.Entities;
+using Back.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,10 +13,11 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Local"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Work"));
     options.UseSeeding(SeedDatabase.SeedPatients);
 });
 
+builder.Services.AddScoped<PatientService>();
 
 var app = builder.Build();
 
