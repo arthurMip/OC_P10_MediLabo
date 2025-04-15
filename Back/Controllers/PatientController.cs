@@ -1,6 +1,5 @@
 ﻿using Back.Models;
 using Back.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Back.Controllers;
@@ -12,11 +11,13 @@ public class PatientController(PatientService patientService) : ControllerBase
     private readonly PatientService patientService = patientService;
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
         try
         {
-            return Ok();
+            var patients = await patientService.GetAllAsync();
+
+            return Ok(patients);
         }
         catch (Exception)
         {
@@ -25,11 +26,16 @@ public class PatientController(PatientService patientService) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         try
         {
-            return Ok();
+            var patient = await patientService.GetByIdAsync(id);
+            if (patient != null)
+            {
+                return Ok(patient);
+            }
+            return NotFound();
         }
         catch (Exception)
         {
@@ -38,7 +44,7 @@ public class PatientController(PatientService patientService) : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreatePatientRequest model)
+    public async Task<IActionResult> Create(CreatePatientRequest model)
     {
         try
         {
@@ -47,7 +53,13 @@ public class PatientController(PatientService patientService) : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            return Ok();
+            var patient = await patientService.CreateAsync(model);
+            if (patient != null)
+            {
+                return Ok(patient);
+            }
+
+            return StatusCode(500);
         }
         catch (Exception)
         {
@@ -56,7 +68,7 @@ public class PatientController(PatientService patientService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, UpdatePatientRequest model)
+    public async Task<IActionResult> Update(int id, UpdatePatientRequest model)
     {
         try
         {
@@ -65,7 +77,20 @@ public class PatientController(PatientService patientService) : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            return Ok();
+            if (await patientService.ExistAsync(id) == false)
+            {
+                return NotFound();
+            }
+
+
+            var patient = await patientService.UpdateAsync(id, model);
+            
+            if (patient != null)
+            {
+                return Ok(patient);
+            }
+
+            return StatusCode(500);
         }
         catch (Exception)
         {
@@ -74,11 +99,22 @@ public class PatientController(PatientService patientService) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         try
         {
-            return Ok();
+            if (await patientService.ExistAsync(id) == false)
+            {
+                return NotFound();
+            }
+
+            var result = await patientService.DeleteAsync(id);
+            if (result == true)
+            {
+                return NoContent();
+            }
+
+            return StatusCode(500);
         }
         catch (Exception)
         {

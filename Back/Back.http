@@ -2,8 +2,26 @@
 @docket_address = https://localhost:32771/api
 
 
-GET {{host_address }}/test
+GET {{host_address }}/patient
 Accept: application/json
+
+###
+
+GET {{host_address}}/patient/1
+Accept: application/json
+
+###
+
+
+POST {{host_address}}/patient
+Content-Type: application/json
+{
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Gender": 1,
+    "BirthDate": "1990-03-01"
+}
+
 
 ###
 

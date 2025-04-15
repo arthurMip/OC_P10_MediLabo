@@ -25,14 +25,19 @@ public class PatientService(AppDbContext context)
 
     public async Task<Patient?> CreateAsync(CreatePatientRequest model)
     {
+        if (model.Firstname == null) return null;
+        if (model.Lastname == null) return null;
+        if (model.BirthDate == null) return null;
+        if (model.Gender == null) return null;
+
         var patient = new Patient
         {
             Firstname = model.Firstname,
             Lastname = model.Lastname,
-            BirthDate = model.BirthDate,
-            Gender = model.Gender,
-            PostalAddress = model.PostalAddress,
-            PhoneNumber = model.PhoneNumber,
+            BirthDate = (DateOnly)model.BirthDate,
+            Gender = (Enums.Gender)model.Gender,
+            PostalAddress = model.PostalAddress ?? string.Empty,
+            PhoneNumber = model.PhoneNumber ?? string.Empty,
         };
 
         await context.Patients.AddAsync(patient);
