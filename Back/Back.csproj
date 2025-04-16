@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e5537e3d-0323-4fe6-8325-b547f2da7c59</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<CETCompat>false</CETCompat>
+
   </PropertyGroup>
 
   <ItemGroup>

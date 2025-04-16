@@ -1,5 +1,4 @@
 ﻿using Back.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace Back.Models;
 

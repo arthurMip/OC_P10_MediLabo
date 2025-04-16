@@ -7,22 +7,9 @@ namespace Front.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly HttpClient httpClient;
-
-        public HomeController(IHttpClientFactory clientFactory)
+        public IActionResult Index()
         {
-            httpClient = clientFactory.CreateClient("api");
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            var patients = await httpClient.GetFromJsonAsync<List<Patient>>("patient");
-            if (patients != null)
-            {
-                return View(patients);
-            }
-            
-            return View(Array.Empty<Patient>());
+            return RedirectToAction("Index", "Patient");
         }
 
         public IActionResult Privacy()

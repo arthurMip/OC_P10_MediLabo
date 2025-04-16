@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Patient>
+@{
+    ViewData["Title"] = "Patients";
+}
+
+@foreach (var patient in Model)
+{
+    <div>
+        <p>Nom: @patient.Lastname</p>
+        <p>Prénom: @patient.Firstname</p>
+        <a href="@($"/Patient/{patient.Id}")">Informations</a>
+    </div>
+    <hr />
+}

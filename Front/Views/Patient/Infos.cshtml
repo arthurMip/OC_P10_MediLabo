@@ -1,0 +1,10 @@
+﻿@model Patient
+
+<div>
+    <p>Nom: @Model.Lastname</p>
+    <p>Prénom: @Model.Firstname</p>
+    <p>Date de naissance: @Model.BirthDate.ToString("dd/MM/yyyy")</p>
+    <p>Genre: @(Model.Gender == Back.Enums.Gender.Male ? "Homme" : "Femme")</p>
+    <p>Adresse: @Model.PostalAddress</p>
+    <p>Téléphone: @Model.PhoneNumber</p>
+</div>
