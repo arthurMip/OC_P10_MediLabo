@@ -13,7 +13,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Work"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Home"));
     options.UseSeeding(SeedDatabase.SeedPatients);
 });
 

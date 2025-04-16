@@ -9,7 +9,7 @@ namespace Front.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Patient");
+            return RedirectToAction("Index", "patients");
         }
 
         public IActionResult Privacy()

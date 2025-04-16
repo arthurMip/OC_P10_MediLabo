@@ -12,7 +12,7 @@ public class PatientController : Controller
         httpClient = clientFactory.CreateClient("api");
     }
 
-    [HttpGet("patient")]
+    [HttpGet("patients")]
     public async Task<IActionResult> Index()
     {
         var patients = await httpClient.GetFromJsonAsync<List<Patient>>("patient");
@@ -24,7 +24,7 @@ public class PatientController : Controller
         return View(Array.Empty<Patient>());
     }
 
-    [HttpGet("patient/{id}")]
+    [HttpGet("patients/{id}")]
     public async Task<IActionResult> Infos(int id)
     {
         var patient = await httpClient.GetFromJsonAsync<Patient>($"patient/{id}");
