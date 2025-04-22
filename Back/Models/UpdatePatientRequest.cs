@@ -1,6 +1,6 @@
-﻿using Back.Enums;
+﻿using PatientApi.Enums;
 
-namespace Back.Models;
+namespace PatientApi.Models;
 
 public class UpdatePatientRequest
 {

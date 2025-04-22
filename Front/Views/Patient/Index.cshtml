@@ -3,12 +3,16 @@
     ViewData["Title"] = "Patients";
 }
 
-@foreach (var patient in Model)
-{
-    <div>
-        <p>Nom: @patient.Lastname</p>
-        <p>Prénom: @patient.Firstname</p>
-        <a href="@($"/patients/{patient.Id}")">Informations</a>
-    </div>
-    <hr />
-}
+<a href="/patients/create" class="btn btn-primary">Add Patient</a>
+
+<div class="mt-4">
+    @foreach (var patient in Model)
+    {
+        <div>
+            <p>Nom: @patient.Lastname</p>
+            <p>Prénom: @patient.Firstname</p>
+            <a href="@($"/patients/{patient.Id}")">Informations</a>
+        </div>
+        <hr />
+    }
+</div>

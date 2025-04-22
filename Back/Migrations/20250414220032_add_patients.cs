@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Back.Migrations
+namespace PatientApi.Migrations
 {
     /// <inheritdoc />
     public partial class add_patients : Migration

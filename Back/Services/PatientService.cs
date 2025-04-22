@@ -1,9 +1,9 @@
-﻿using Back.Data;
-using Back.Data.Entities;
-using Back.Models;
+﻿using PatientApi.Data;
+using PatientApi.Data.Entities;
+using PatientApi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Back.Services;
+namespace PatientApi.Services;
 
 public class PatientService(AppDbContext context)
 {

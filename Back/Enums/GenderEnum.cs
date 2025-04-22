@@ -1,4 +1,4 @@
-﻿namespace Back.Enums;
+﻿namespace PatientApi.Enums;
 
 public enum Gender
 {

@@ -1,8 +1,8 @@
-﻿using Back.Data.Entities;
-using Back.Enums;
+﻿using PatientApi.Data.Entities;
+using PatientApi.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace Back.Data;
+namespace PatientApi.Data;
 
 public static class SeedDatabase
 {

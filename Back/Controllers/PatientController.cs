@@ -1,8 +1,8 @@
-﻿using Back.Models;
-using Back.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using PatientApi.Models;
+using PatientApi.Services;
 
-namespace Back.Controllers;
+namespace PatientApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

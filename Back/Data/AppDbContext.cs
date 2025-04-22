@@ -1,7 +1,7 @@
-﻿using Back.Data.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using PatientApi.Data.Entities;
 
-namespace Back.Data;
+namespace PatientApi.Data;
 
 public class AppDbContext(DbContextOptions options) : DbContext(options)
 {

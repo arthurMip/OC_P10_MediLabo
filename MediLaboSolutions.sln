@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Back", "Back\Back.csproj", "{3F825062-0785-4873-8958-FB5E40F349DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientApi", "Back\PatientApi.csproj", "{3F825062-0785-4873-8958-FB5E40F349DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Front", "Front\Front.csproj", "{92FCF04B-3E46-48B1-9E26-F1056FE1B0A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthApi", "AuthApi\AuthApi.csproj", "{A53B0033-A760-40B0-8AF7-C9A56975BD3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{92FCF04B-3E46-48B1-9E26-F1056FE1B0A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92FCF04B-3E46-48B1-9E26-F1056FE1B0A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92FCF04B-3E46-48B1-9E26-F1056FE1B0A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A53B0033-A760-40B0-8AF7-C9A56975BD3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A53B0033-A760-40B0-8AF7-C9A56975BD3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A53B0033-A760-40B0-8AF7-C9A56975BD3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A53B0033-A760-40B0-8AF7-C9A56975BD3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

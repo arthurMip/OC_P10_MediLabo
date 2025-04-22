@@ -1,6 +1,6 @@
-﻿using Back.Enums;
+﻿using PatientApi.Enums;
 
-namespace Back.Data.Entities;
+namespace PatientApi.Data.Entities;
 
 public class Patient
 {
