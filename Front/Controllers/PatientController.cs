@@ -12,7 +12,7 @@ public class PatientController : Controller
 
     public PatientController(IHttpClientFactory clientFactory)
     {
-        httpClient = clientFactory.CreateClient("api");
+        httpClient = clientFactory.CreateClient("patient_api");
     }
 
     [HttpGet("/patients")]

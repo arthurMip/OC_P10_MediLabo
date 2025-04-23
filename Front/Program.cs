@@ -3,9 +3,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpClient("api", client =>
+builder.Services.AddHttpClient("patient_api", client =>
 {
     client.BaseAddress = new Uri("http://localhost:5242/api/");
+});
+
+builder.Services.AddHttpClient("auth_api", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5162/api/");
 });
 
 var app = builder.Build();
