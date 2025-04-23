@@ -3,9 +3,12 @@ using PatientApi.Models;
 using PatientApi.Enums;
 using Front.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Front.Controllers;
 
+[Authorize]
 public class PatientController : Controller
 {
     private readonly HttpClient httpClient;
@@ -18,18 +21,35 @@ public class PatientController : Controller
     [HttpGet("/patients")]
     public async Task<IActionResult> Index()
     {
-        var patients = await httpClient.GetFromJsonAsync<List<Patient>>("patient");
-        if (patients != null)
+        try
         {
-            return View(patients);
+            var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+            var patients = await httpClient.GetFromJsonAsync<List<Patient>>("patient");
+            if (patients != null)
+            {
+                return View(patients);
+            }
+        }
+        catch (HttpRequestException)
+        {
+
+        }
+        catch (Exception)
+        {
         }
 
         return View(Array.Empty<Patient>());
     }
 
+
     [HttpGet("/patients/{id}")]
     public async Task<IActionResult> Infos(int id)
     {
+        var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
         var patient = await httpClient.GetFromJsonAsync<Patient>($"patient/{id}");
         if (patient != null)
         {

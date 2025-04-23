@@ -13,6 +13,15 @@ builder.Services.AddHttpClient("auth_api", client =>
     client.BaseAddress = new Uri("http://localhost:5162/api/");
 });
 
+
+builder.Services
+    .AddAuthentication("Cookies")
+    .AddCookie("Cookies", options =>
+    {
+        options.LoginPath = "/login";
+    });
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

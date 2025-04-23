@@ -1,6 +1,9 @@
 ﻿using Front.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Front.Controllers;
 
@@ -33,10 +36,22 @@ public class AuthController : Controller
         var response = await httpClient.PostAsJsonAsync("auth/login", model);
         if (response.IsSuccessStatusCode)
         {
-            var token = await response.Content.ReadAsStringAsync();
+            var jwt = await response.Content.ReadAsStringAsync();
 
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(jwt);
+            var identity = new ClaimsIdentity(token.Claims, "Cookies");
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync("Cookies", principal);
 
-            return RedirectToAction("Index");
+            Response.Cookies.Append("jwt", jwt, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            });
+
+            return RedirectToAction("Index", "Patient");
         }
 
         ModelState.AddModelError(string.Empty, "Invalid login attempt.");
