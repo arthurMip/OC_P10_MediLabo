@@ -5,7 +5,7 @@ using PatientApi.Services;
 
 namespace PatientApi.Controllers;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class PatientController(PatientService patientService) : ControllerBase

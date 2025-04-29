@@ -5,12 +5,12 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient("patient_api", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5242/api/");
+    client.BaseAddress = new Uri("https://localhost:5000/api/patient");
 });
 
 builder.Services.AddHttpClient("auth_api", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5162/api/");
+    client.BaseAddress = new Uri("https://localhost:4000/api/auth");
 });
 
 
@@ -20,7 +20,6 @@ builder.Services
     {
         options.LoginPath = "/login";
     });
-
 
 var app = builder.Build();
 
