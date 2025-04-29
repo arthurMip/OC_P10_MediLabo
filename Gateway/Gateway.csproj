@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	  <CETCompat>false</CETCompat>
+	<CETCompat>false</CETCompat>
   </PropertyGroup>
 
   <ItemGroup>
