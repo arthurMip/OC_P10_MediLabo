@@ -27,6 +27,11 @@ public class PatientNotesService
             .ToListAsync();
     }
 
+    public Task CreateNoteAsync(PatientNote note)
+    {
+        _context.PatientNotes.Add(note);
+        return _context.SaveChangesAsync();
+    }
 
     public Task<List<PatientNote>> GetAllAsync()
     {

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PatientNotesApi.Database;
+using PatientNotesApi.Models;
 using PatientNotesApi.Services;
 
 namespace PatientNotesApi.Controllers;
@@ -21,11 +23,7 @@ public class PatientNotesController : ControllerBase
         try
         {
             var notes = await _patientNotesService.GetNotesByPatientIdAsync(patientId);
-            if (notes != null)
-            {
-                return Ok(notes);
-            }
-            return NotFound();
+            return Ok(notes);
         }
         catch (Exception)
         {
@@ -33,4 +31,27 @@ public class PatientNotesController : ControllerBase
         }
     }
 
+
+    [HttpPost]
+    public async Task<IActionResult> CreateNote([FromBody] CreateNoteRequest request)
+    {
+        try
+        {
+            var note = new PatientNote
+            {
+                PatientId = request.PatientId,
+                Note = request.Note,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _patientNotesService.CreateNoteAsync(note);
+
+            return Ok();
+
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
 }
