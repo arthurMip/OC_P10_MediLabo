@@ -1,24 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Contracts.Requests;
 using Microsoft.AspNetCore.Mvc;
-using PatientNotesApi.Database;
-using PatientNotesApi.Models;
+using PatientNotesApi.Mapping;
 using PatientNotesApi.Services;
 
 namespace PatientNotesApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/notes")]
 [ApiController]
-public class PatientNotesController : ControllerBase
+public class PatientNotesController(PatientNotesService patientNotesService) : ControllerBase
 {
-    private readonly PatientNotesService _patientNotesService;
-    public PatientNotesController(PatientNotesService patientNotesService)
-    {
-        _patientNotesService = patientNotesService;
-    }
-
+    private readonly PatientNotesService _patientNotesService = patientNotesService;
 
     [HttpGet("{patientId}")]
-    public async Task<IActionResult> GetNotesByPatientId(int patientId)
+    public async Task<IActionResult> GetNotesByPatientId([FromRoute] int patientId)
     {
         try
         {
@@ -37,12 +31,7 @@ public class PatientNotesController : ControllerBase
     {
         try
         {
-            var note = new PatientNote
-            {
-                PatientId = request.PatientId,
-                Note = request.Note,
-                CreatedAt = DateTime.UtcNow
-            };
+            var note = request.MapToPatientNote();
 
             await _patientNotesService.CreateNoteAsync(note);
 

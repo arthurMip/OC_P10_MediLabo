@@ -3,16 +3,15 @@ using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace PatientNotesApi.Database;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-    }
     public DbSet<PatientNote> PatientNotes { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<PatientNote>().ToCollection("PatientNotes");
+        modelBuilder.Entity<PatientNote>()
+            .ToCollection("PatientNotes")
+            .HasIndex(x => x.PatientId);
     }
 }

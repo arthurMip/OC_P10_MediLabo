@@ -1,7 +1,7 @@
 ﻿using PatientApi.Data;
 using PatientApi.Data.Entities;
-using PatientApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Contracts.Requests;
 
 namespace PatientApi.Services;
 
@@ -23,45 +23,29 @@ public class PatientService(AppDbContext context)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<Patient?> CreateAsync(CreatePatientRequest model)
+    public async Task<bool> CreateAsync(Patient patient)
     {
-        if (model.Firstname == null) return null;
-        if (model.Lastname == null) return null;
-        if (model.BirthDate == null) return null;
-        if (model.Gender == null) return null;
-
-        var patient = new Patient
-        {
-            Firstname = model.Firstname,
-            Lastname = model.Lastname,
-            BirthDate = (DateOnly)model.BirthDate,
-            Gender = (Enums.Gender)model.Gender,
-            PostalAddress = model.PostalAddress ?? string.Empty,
-            PhoneNumber = model.PhoneNumber ?? string.Empty,
-        };
-
         await context.Patients.AddAsync(patient);
-        await context.SaveChangesAsync();
 
-        return patient;
+        var result = await context.SaveChangesAsync();
+
+        return result > 0;
     }
 
-    public async Task<Patient?> UpdateAsync(int id, UpdatePatientRequest model)
+    public async Task<Patient?> UpdateAsync(Patient patient)
     {
-        var patient = await context.Patients.FirstOrDefaultAsync(p => p.Id == id);
-        if (patient == null)
+        if (!await ExistAsync(patient.Id))
         {
             return null;
         }
 
-        patient.Firstname = model.Firstname ?? patient.Firstname;
-        patient.Lastname = model.Lastname ?? patient.Lastname;
-        patient.BirthDate = model.BirthDate ?? patient.BirthDate;
-        patient.Gender = model.Gender ?? patient.Gender;
-        patient.PostalAddress = model.PostalAddress ?? patient.PostalAddress;
-        patient.PhoneNumber = model.PhoneNumber ?? patient.PhoneNumber;
+        context.Patients.Update(patient);
 
-        await context.SaveChangesAsync();
+        bool updated = await context.SaveChangesAsync() > 0;
+        if (!updated)
+        {
+            return null;
+        }
 
         return patient;
     }

@@ -1,30 +1,54 @@
 {
-  "Routes": [
-    {
-      "DownstreamPathTemplate": "/api/auth",
-      "UpstreamPathTemplate": "/api/auth",
-      "DownstreamScheme": "https",
-      "UpstreamHttpMethod": ["GET", "POST"],
-      "DownstreamHostAndPorts": [
+    "Routes": [
         {
-          "Host": "localhost",
-          "Port": 4000
-        }
-      ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/patient",
-      "UpstreamPathTemplate": "/api/patient",
-      "DownstreamScheme": "https",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
-      "DownstreamHostAndPorts": [
+            "UpstreamPathTemplate": "/api/auth/{all}",
+            "DownstreamPathTemplate": "/api/auth/{all}",
+            "DownstreamScheme": "https",
+            "UpstreamHttpMethod": [ "POST" ],
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 4000
+                }
+            ]
+        },
         {
-          "Host": "localhost",
-          "Port": 5000
+            "UpstreamPathTemplate": "/api/patients/{all}",
+            "DownstreamPathTemplate": "/api/patients/{all}",
+            "DownstreamScheme": "https",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5000
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/api/notes",
+            "DownstreamPathTemplate": "/api/notes",
+            "DownstreamScheme": "https",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 6500
+                }
+            ]
+        },
+        {
+            "UpstreamPathTemplate": "/api/notes/{id}",
+            "DownstreamPathTemplate": "/api/notes/{id}",
+            "DownstreamScheme": "https",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 6500
+                }
+            ]
         }
-      ]
-    }
-  ],
+    ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7000"
   }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Front.Models;
+namespace Front.ViewModels;
 
 public class LoginViewModel
 {

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway", "Gateway\Gateway.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientNotesApi", "PatientNotesApi\PatientNotesApi.csproj", "{05F53191-926B-4210-BC31-8467F730010B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{DD883D17-E50B-4924-AA2A-3B3BC3D29ED3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{05F53191-926B-4210-BC31-8467F730010B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05F53191-926B-4210-BC31-8467F730010B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05F53191-926B-4210-BC31-8467F730010B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD883D17-E50B-4924-AA2A-3B3BC3D29ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD883D17-E50B-4924-AA2A-3B3BC3D29ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD883D17-E50B-4924-AA2A-3B3BC3D29ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD883D17-E50B-4924-AA2A-3B3BC3D29ED3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Contracts.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PatientApi.Models;
+using PatientApi.Mapping;
 using PatientApi.Services;
 
 namespace PatientApi.Controllers;
 
-//[Authorize]
-[Route("api/[controller]")]
+[Authorize]
+[Route("api/patients")]
 [ApiController]
-public class PatientController(PatientService patientService) : ControllerBase
+public class PatientsController(PatientService patientService) : ControllerBase
 {
     private readonly PatientService patientService = patientService;
 
@@ -18,8 +19,8 @@ public class PatientController(PatientService patientService) : ControllerBase
         try
         {
             var patients = await patientService.GetAllAsync();
-
-            return Ok(patients);
+            var response = patients.MapToResponse();
+            return Ok(response);
         }
         catch (Exception)
         {
@@ -28,16 +29,18 @@ public class PatientController(PatientService patientService) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById([FromRoute] int id)
     {
         try
         {
             var patient = await patientService.GetByIdAsync(id);
-            if (patient != null)
+            if (patient is null)
             {
-                return Ok(patient);
+                return NotFound();
             }
-            return NotFound();
+
+            var response = patient.MapToResponse();
+            return Ok(response);
         }
         catch (Exception)
         {
@@ -46,7 +49,7 @@ public class PatientController(PatientService patientService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreatePatientRequest model)
+    public async Task<IActionResult> Create([FromBody] CreatePatientRequest request)
     {
         try
         {
@@ -55,13 +58,15 @@ public class PatientController(PatientService patientService) : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var patient = await patientService.CreateAsync(model);
-            if (patient != null)
+            var patient = request.MapToPatient();
+
+            var result = await patientService.CreateAsync(patient);
+            if (result == false)
             {
-                return Ok(patient);
+                return StatusCode(500);
             }
 
-            return StatusCode(500);
+            return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
         }
         catch (Exception)
         {
@@ -70,7 +75,7 @@ public class PatientController(PatientService patientService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, UpdatePatientRequest model)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdatePatientRequest model)
     {
         try
         {
@@ -79,20 +84,15 @@ public class PatientController(PatientService patientService) : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            if (await patientService.ExistAsync(id) == false)
+            var patient = model.MapToPatient(id);
+            var result = await patientService.UpdateAsync(patient);
+            if (result is null)
             {
                 return NotFound();
             }
 
-
-            var patient = await patientService.UpdateAsync(id, model);
-            
-            if (patient != null)
-            {
-                return Ok(patient);
-            }
-
-            return StatusCode(500);
+            var response = result.MapToResponse();
+            return Ok(response);
         }
         catch (Exception)
         {
@@ -101,7 +101,7 @@ public class PatientController(PatientService patientService) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
         try
         {
@@ -110,13 +110,8 @@ public class PatientController(PatientService patientService) : ControllerBase
                 return NotFound();
             }
 
-            var result = await patientService.DeleteAsync(id);
-            if (result == true)
-            {
-                return NoContent();
-            }
-
-            return StatusCode(500);
+            bool deleted = await patientService.DeleteAsync(id);
+            return deleted ? NoContent() : NotFound();
         }
         catch (Exception)
         {

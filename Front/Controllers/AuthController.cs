@@ -1,4 +1,4 @@
-﻿using Front.Models;
+﻿using Front.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

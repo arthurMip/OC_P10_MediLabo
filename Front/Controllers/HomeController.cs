@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using Front.Models;
+using Front.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Front.Controllers

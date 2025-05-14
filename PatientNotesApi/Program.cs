@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using PatientNotesApi.Database;
 using PatientNotesApi.Services;

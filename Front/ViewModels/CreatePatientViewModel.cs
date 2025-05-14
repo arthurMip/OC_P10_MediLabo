@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Front.Models;
+namespace Front.ViewModels;
 
 public class CreatePatientViewModel
 {

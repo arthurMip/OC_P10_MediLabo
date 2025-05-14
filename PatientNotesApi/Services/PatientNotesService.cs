@@ -17,8 +17,6 @@ public class PatientNotesService
         _context = new AppDbContext(dbContextOptions.Options);
     }
 
-
-
     public Task<List<PatientNote>> GetNotesByPatientIdAsync(int patientId)
     {
         return _context.PatientNotes
@@ -39,5 +37,4 @@ public class PatientNotesService
             .AsNoTracking()
             .ToListAsync();
     }
-
 }

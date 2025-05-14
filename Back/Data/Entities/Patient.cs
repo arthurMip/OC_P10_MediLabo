@@ -1,4 +1,4 @@
-﻿using PatientApi.Enums;
+﻿using Contracts.Enums;
 
 namespace PatientApi.Data.Entities;
 

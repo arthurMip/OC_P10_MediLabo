@@ -1,11 +1,26 @@
-﻿@using PatientApi.Enums
-@model Patient
+﻿@model PatientDetailViewModel
+
+<h3>Patient Informations:</h3>
 
 <div>
-    <p>Nom: @Model.Lastname</p>
-    <p>Prénom: @Model.Firstname</p>
-    <p>Date de naissance: @Model.BirthDate.ToString("dd/MM/yyyy")</p>
-    <p>Genre: @(Model.Gender == Gender.Male ? "Homme" : "Femme")</p>
-    <p>Adresse: @Model.PostalAddress</p>
-    <p>Téléphone: @Model.PhoneNumber</p>
+   <p>Nom: @Model.Lastname</p>
+   <p>Prénom: @Model.Firstname</p>
+   <p>Date de naissance: @Model.BirthDate.ToString("dd/MM/yyyy")</p>
+   <p>Genre: @(Model.Gender == Gender.Male ? "Homme" : "Femme")</p>
+   <p>Adresse: @Model.PostalAddress</p>
+   <p>Téléphone: @Model.PhoneNumber</p>
 </div>
+
+@if (Model.Notes.Any())
+{
+    <h3> Patient Notes:</h3>
+    <div>
+        @foreach (var note in Model.Notes)
+        {
+            <div>
+                <p>Date: @note.CreatedAt.ToShortDateString()</p>
+                <p>@note.Note</p>
+            </div>
+        }
+    </div>
+}

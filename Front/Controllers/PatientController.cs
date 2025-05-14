@@ -1,21 +1,27 @@
 using PatientApi.Data.Entities;
-using PatientApi.Models;
-using PatientApi.Enums;
-using Front.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
+using Contracts.Requests;
+using Contracts.Enums;
+using Contracts.Responses;
+using Azure;
+using Front.ViewModels;
+using Front.Mapping;
 
 namespace Front.Controllers;
 
 [Authorize]
 public class PatientController : Controller
 {
-    private readonly HttpClient httpClient;
+    private readonly HttpClient patientsApi;
+    private readonly HttpClient notesApi;
+
 
     public PatientController(IHttpClientFactory clientFactory)
     {
-        httpClient = clientFactory.CreateClient("patient_api");
+        patientsApi = clientFactory.CreateClient("patients_api");
+        notesApi = clientFactory.CreateClient("notes_api");
     }
 
     [HttpGet("/patients")]
@@ -24,12 +30,13 @@ public class PatientController : Controller
         try
         {
             var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            patientsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-            var patients = await httpClient.GetFromJsonAsync<List<Patient>>("patient");
-            if (patients != null)
+            var patients = await patientsApi.GetFromJsonAsync<IEnumerable<PatientResponse>>("patients");
+
+            if (patients is not null)
             {
-                return View(patients);
+                return View(patients.MapToViewModel());
             }
         }
         catch (HttpRequestException)
@@ -40,7 +47,7 @@ public class PatientController : Controller
         {
         }
 
-        return View(Array.Empty<Patient>());
+        return View(Array.Empty<PatientListItemViewModel>());
     }
 
 
@@ -48,12 +55,15 @@ public class PatientController : Controller
     public async Task<IActionResult> Infos(int id)
     {
         var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        patientsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        notesApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-        var patient = await httpClient.GetFromJsonAsync<Patient>($"patient/{id}");
-        if (patient != null)
+        var patient = await patientsApi.GetFromJsonAsync<PatientResponse>($"patients/{id}");
+        var notes = await notesApi.GetFromJsonAsync<IEnumerable<NoteResponse>>($"notes/{id}");
+
+        if (patient is not null && notes is not null)
         {
-            return View(patient);
+            return View(patient.MapToViewModel(notes));
         }
 
         return NotFound();
@@ -73,18 +83,21 @@ public class PatientController : Controller
             return View(patient);
         }
 
-        var patientRequest = new CreatePatientRequest
+        var request = new CreatePatientRequest
         {
             Firstname = patient.Firstname.Trim(),
             Lastname = patient.Lastname.Trim(),
             BirthDate = DateOnly.FromDateTime(patient.BirthDate),
             Gender = patient.Gender == "M" ? Gender.Male : Gender.Female,
-
             PostalAddress = patient.PostalAddress?.Trim(),
             PhoneNumber = patient.PhoneNumber?.Trim()
         };
 
-        var response = await httpClient.PostAsJsonAsync("patient", patientRequest);
+        var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
+        patientsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+
+        var response = await patientsApi.PostAsJsonAsync("patients", request);
         if (response.IsSuccessStatusCode)
         {
             return RedirectToAction("Index");

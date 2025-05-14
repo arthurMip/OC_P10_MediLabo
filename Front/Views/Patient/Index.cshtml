@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Patient>
+﻿@model IEnumerable<PatientListItemViewModel>
 @{
     ViewData["Title"] = "Patients";
 }
@@ -11,7 +11,7 @@
         <div>
             <p>Nom: @patient.Lastname</p>
             <p>Prénom: @patient.Firstname</p>
-            <a href="@($"/patients/{patient.Id}")">Informations</a>
+            <a href="@($"/patients/{patient.Id}")">Voir informations</a>
         </div>
         <hr />
     }
