@@ -1,5 +1,5 @@
-﻿using Contracts.Enums;
-using Contracts.Responses;
+﻿using Front.Models.Responses;
+using Front.Models.Enums;
 using Front.ViewModels;
 
 namespace Front.Mapping;
@@ -25,7 +25,7 @@ public static class ContractMapping
     {
         return new PatientDetailViewModel
         {
-            Id = patient.Id,
+            PatientId = patient.Id,
             Firstname = patient.Firstname,
             Lastname = patient.Lastname,
             Gender = patient.Gender,

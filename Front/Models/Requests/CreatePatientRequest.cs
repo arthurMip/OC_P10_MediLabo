@@ -1,8 +1,8 @@
-﻿using Contracts.Enums;
+﻿using Front.Models.Enums;
 
-namespace Contracts.Requests;
+namespace Front.Models.Requests;
 
-public class UpdatePatientRequest
+public class CreatePatientRequest
 {
     public required string Firstname { get; init; }
     public required string Lastname { get; init; }

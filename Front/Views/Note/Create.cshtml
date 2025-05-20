@@ -1,0 +1,31 @@
+﻿@model CreateNoteViewModel
+
+@{
+   ViewData["Title"] = "Create Note";
+
+	var errors = ViewData.ModelState[""]?.Errors ?? [];
+}
+
+@if (errors.Count > 0)
+{
+   <div class="alert alert-danger">
+        @foreach (var error in errors)
+       {
+           <p>@error.ErrorMessage</p>
+       }
+   </div>
+}
+
+<form asp-route="/notes/@Model.PatientId/create" method="post">
+   <div class="form-group">
+       <label asp-for="Note"></label>
+       <input asp-for="Note" class="form-control" />
+       <span asp-validation-for="Note" class="text-danger"></span>
+   </div>
+
+	<br />
+
+   <div class="form-group">
+       <button type="submit" class="btn btn-primary">Submit</button>
+   </div>
+</form>

@@ -1,7 +1,7 @@
-﻿using Contracts.Requests;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PatientApi.Mapping;
+using PatientApi.Models.Requests;
 using PatientApi.Services;
 
 namespace PatientApi.Controllers;
@@ -39,8 +39,8 @@ public class PatientsController(PatientService patientService) : ControllerBase
                 return NotFound();
             }
 
-            var response = patient.MapToResponse();
-            return Ok(response);
+
+            return Ok(patient.ToResponse());
         }
         catch (Exception)
         {
@@ -58,7 +58,7 @@ public class PatientsController(PatientService patientService) : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var patient = request.MapToPatient();
+            var patient = request.ToPatient();
 
             var result = await patientService.CreateAsync(patient);
             if (result == false)

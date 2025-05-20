@@ -1,7 +1,6 @@
 ﻿using PatientApi.Data;
 using PatientApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Contracts.Requests;
 
 namespace PatientApi.Services;
 

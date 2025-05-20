@@ -1,4 +1,4 @@
-﻿namespace Contracts.Requests;
+﻿namespace Front.Models.Requests;
 
 public class CreateNoteRequest
 {

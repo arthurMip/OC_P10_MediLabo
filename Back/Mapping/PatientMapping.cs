@@ -1,26 +1,11 @@
-﻿using Contracts.Enums;
-using Contracts.Requests;
-using Contracts.Responses;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using PatientApi.Data.Entities;
+﻿using PatientApi.Data.Entities;
+using PatientApi.Models.Requests;
+using PatientApi.Models.Responses;
 
 namespace PatientApi.Mapping;
 
 public static class ContractMapping
 {
-    public static Patient MapToPatient(this CreatePatientRequest request)
-    {
-        return new Patient
-        {
-            Firstname = request.Firstname,
-            Lastname = request.Lastname,
-            BirthDate = request.BirthDate,
-            Gender = request.Gender,
-            PostalAddress = request.PostalAddress ?? string.Empty,
-            PhoneNumber = request.PhoneNumber ?? string.Empty,
-        };
-    }
-
     public static Patient MapToPatient(this UpdatePatientRequest request, int id)
     {
         return new Patient

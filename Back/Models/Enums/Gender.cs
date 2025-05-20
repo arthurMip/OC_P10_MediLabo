@@ -1,4 +1,4 @@
-﻿namespace Contracts.Enums;
+﻿namespace PatientApi.Models.Enums;
 public enum Gender
 {
     Male,

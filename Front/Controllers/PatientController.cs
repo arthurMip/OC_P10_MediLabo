@@ -1,13 +1,11 @@
-using PatientApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
-using Contracts.Requests;
-using Contracts.Enums;
-using Contracts.Responses;
-using Azure;
 using Front.ViewModels;
 using Front.Mapping;
+using Front.Models.Enums;
+using Front.Models.Requests;
+using Front.Models.Responses;
 
 namespace Front.Controllers;
 
@@ -16,7 +14,6 @@ public class PatientController : Controller
 {
     private readonly HttpClient patientsApi;
     private readonly HttpClient notesApi;
-
 
     public PatientController(IHttpClientFactory clientFactory)
     {
@@ -36,7 +33,7 @@ public class PatientController : Controller
 
             if (patients is not null)
             {
-                return View(patients.MapToViewModel());
+                return View(patients);
             }
         }
         catch (HttpRequestException)
@@ -58,13 +55,12 @@ public class PatientController : Controller
         patientsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
         notesApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-        var patient = await patientsApi.GetFromJsonAsync<PatientResponse>($"patients/{id}");
-        var notes = await notesApi.GetFromJsonAsync<IEnumerable<NoteResponse>>($"notes/{id}");
+        var patient = await patientsApi.GetFromJsonAsync<PatientApi.Models.Responses.PatientResponse>($"patients/{id}");
 
-        if (patient is not null && notes is not null)
-        {
-            return View(patient.MapToViewModel(notes));
-        }
+        //if (patient is not null && notes is not null)
+        //{
+        //    return View(patient.MapToViewModel(notes));
+        //}
 
         return NotFound();
     }
@@ -106,4 +102,5 @@ public class PatientController : Controller
         ModelState.AddModelError(string.Empty, "Une erreur est survenue lors de la création du patient.");
         return View(patient);
     }
+
 }

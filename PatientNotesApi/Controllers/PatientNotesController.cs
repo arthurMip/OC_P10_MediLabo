@@ -1,6 +1,5 @@
-﻿using Contracts.Requests;
-using Microsoft.AspNetCore.Mvc;
-using PatientNotesApi.Mapping;
+﻿using Microsoft.AspNetCore.Mvc;
+using PatientNotesApi.Models.Requests;
 using PatientNotesApi.Services;
 
 namespace PatientNotesApi.Controllers;
@@ -31,7 +30,7 @@ public class PatientNotesController(PatientNotesService patientNotesService) : C
     {
         try
         {
-            var note = request.MapToPatientNote();
+            var note = request.ToPatientNote();
 
             await _patientNotesService.CreateNoteAsync(note);
 

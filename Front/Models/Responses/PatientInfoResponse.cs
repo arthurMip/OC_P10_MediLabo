@@ -1,8 +1,7 @@
-﻿using Contracts.Enums;
+﻿using Front.Models.Enums;
+using Front.Models.Responses;
 
-namespace Contracts.Responses;
-
-public class PatientResponse
+public class PatientInfoResponse
 {
     public required int Id { get; init; }
     public required string Firstname { get; init; }
@@ -11,4 +10,6 @@ public class PatientResponse
     public required Gender Gender { get; init; }
     public string? PostalAddress { get; init; }
     public string? PhoneNumber { get; init; }
+    public required DiabetesRisk DiabetesRisk { get; init; }
+    public required NoteResponse[] Notes { get; init; }
 }

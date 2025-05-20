@@ -1,6 +1,6 @@
 ﻿using PatientApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Contracts.Enums;
+using PatientApi.Models.Enums;
 
 namespace PatientApi.Data;
 

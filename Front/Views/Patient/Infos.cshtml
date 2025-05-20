@@ -1,4 +1,5 @@
-﻿@model PatientDetailViewModel
+﻿@using Front.Models.Enums
+@model PatientDetailViewModel
 
 <h3>Patient Informations:</h3>
 
@@ -11,16 +12,23 @@
    <p>Téléphone: @Model.PhoneNumber</p>
 </div>
 
+<br/>
+
+<h3> Patient Notes:</h3>
+<a href="/notes/@Model.PatientId/create" class="btn btn-primary">Add Note</a>
+
 @if (Model.Notes.Any())
 {
-    <h3> Patient Notes:</h3>
     <div>
         @foreach (var note in Model.Notes)
         {
+		    <hr />
             <div>
                 <p>Date: @note.CreatedAt.ToShortDateString()</p>
                 <p>@note.Note</p>
             </div>
         }
+        <hr />
+
     </div>
 }
