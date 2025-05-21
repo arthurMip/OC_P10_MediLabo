@@ -36,18 +36,30 @@
                 }
             ]
         },
-        {
-            "UpstreamPathTemplate": "/api/notes/{id}",
-            "DownstreamPathTemplate": "/api/notes/{id}",
-            "DownstreamScheme": "https",
-            "UpstreamHttpMethod": [ "GET" ],
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "localhost",
-                    "Port": 6500
-                }
-            ]
-        }
+      {
+        "UpstreamPathTemplate": "/api/notes/{id}",
+        "DownstreamPathTemplate": "/api/notes/{id}",
+        "DownstreamScheme": "https",
+        "UpstreamHttpMethod": [ "GET" ],
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 6500
+          }
+        ]
+      },
+      {
+        "UpstreamPathTemplate": "/api/diabetes-reports",
+        "DownstreamPathTemplate": "/api/diabetes-reports",
+        "DownstreamScheme": "https",
+        "UpstreamHttpMethod": [ "POST" ],
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 6600
+          }
+        ]
+      }
     ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7000"

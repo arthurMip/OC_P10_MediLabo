@@ -20,6 +20,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSeeding(SeedDatabase.SeedPatients);
 });
 
+
+builder.Services.AddHttpClient("patients_api", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7000/api/patients");
+});
+
+builder.Services.AddHttpClient("notes_api", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7000/api/notes");
+});
+
+builder.Services.AddHttpClient("diabetes_report_api", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7000/api/diabetes-reports");
+});
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -34,6 +34,8 @@ public class PatientsController(PatientService patientService) : ControllerBase
         try
         {
             var patient = await patientService.GetByIdAsync(id);
+
+
             if (patient is null)
             {
                 return NotFound();
