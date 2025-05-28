@@ -19,10 +19,6 @@ builder.Services.AddHttpClient("notes_api", client =>
 });
 
 
-
-
-
-
 builder.Services
     .AddAuthentication("Cookies")
     .AddCookie("Cookies", options =>

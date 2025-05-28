@@ -1,21 +1,42 @@
-﻿@using Front.Models.Enums
-@model PatientDetailViewModel
+﻿@model PatientInfoResponse
 
 <h3>Patient Informations:</h3>
 
 <div>
-   <p>Nom: @Model.Lastname</p>
-   <p>Prénom: @Model.Firstname</p>
-   <p>Date de naissance: @Model.BirthDate.ToString("dd/MM/yyyy")</p>
-   <p>Genre: @(Model.Gender == Gender.Male ? "Homme" : "Femme")</p>
-   <p>Adresse: @Model.PostalAddress</p>
-   <p>Téléphone: @Model.PhoneNumber</p>
+    <p>Nom: @Model.Lastname</p>
+    <p>Prénom: @Model.Firstname</p>
+    <p>Date de naissance: @Model.BirthDate.ToString("dd/MM/yyyy")</p>
+    <p>Genre: @(Model.Gender == Gender.Male ? "Homme" : "Femme")</p>
+    <p>Adresse: @Model.PostalAddress</p>
+    <p>Téléphone: @Model.PhoneNumber</p>
 </div>
 
 <br/>
 
+
+<h3>Risque de diabète:</h3>
+@if (Model.DiabetesRisk == DiabetesRisk.None)
+{
+    <p>aucun risque</p>
+}
+else if (Model.DiabetesRisk == DiabetesRisk.Borderline)
+{
+    <p>risque limité</p>
+}
+else if (Model.DiabetesRisk == DiabetesRisk.InDanger)
+{
+    <p>danger</p>
+}
+else if (Model.DiabetesRisk == DiabetesRisk.EarlyOnset)
+{
+    <p>apparition précoce</p>
+}
+
+<br />
+
+
 <h3> Patient Notes:</h3>
-<a href="/notes/@Model.PatientId/create" class="btn btn-primary">Add Note</a>
+<a href="/notes/@Model.Id/create" class="btn btn-primary">Add Note</a>
 
 @if (Model.Notes.Any())
 {
@@ -29,6 +50,5 @@
             </div>
         }
         <hr />
-
     </div>
 }

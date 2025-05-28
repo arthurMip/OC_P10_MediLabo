@@ -1,4 +1,5 @@
-﻿using DiabeteReportApi.Models.Requests;
+﻿using System.Threading.Tasks;
+using DiabeteReportApi.Models.Requests;
 using DiabeteReportApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,9 @@ public class DiabetesReportController : ControllerBase
     public DiabetesReportController() {}
 
     [HttpPost]
-    public IActionResult GetReport([FromBody] DiabetesReportRequest request)
+    public async Task<IActionResult> GetReport([FromBody] DiabetesReportRequest request)
     {
-        var result = DiabetesReportService.GenerateReport(request);
+        var result = await Task.Run(() => DiabetesReportService.GenerateReport(request));
 
         return Ok(result);
     }

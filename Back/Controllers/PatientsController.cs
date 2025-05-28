@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PatientApi.Mapping;
+using PatientApi.Models.Enums;
 using PatientApi.Models.Requests;
+using PatientApi.Models.Responses;
 using PatientApi.Services;
 
 namespace PatientApi.Controllers;
@@ -9,16 +13,26 @@ namespace PatientApi.Controllers;
 [Authorize]
 [Route("api/patients")]
 [ApiController]
-public class PatientsController(PatientService patientService) : ControllerBase
+public class PatientsController : ControllerBase
 {
-    private readonly PatientService patientService = patientService;
+    private readonly PatientService _patientService;
+    private readonly HttpClient _notesApi;
+    private readonly HttpClient _reportApi;
+
+
+    public PatientsController(PatientService patientService, IHttpClientFactory clientFactory)
+    {
+        _patientService = patientService;
+        _notesApi = clientFactory.CreateClient("notes_api");
+        _reportApi = clientFactory.CreateClient("report_api");
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         try
         {
-            var patients = await patientService.GetAllAsync();
+            var patients = await _patientService.GetAllAsync();
             var response = patients.MapToResponse();
             return Ok(response);
         }
@@ -33,16 +47,52 @@ public class PatientsController(PatientService patientService) : ControllerBase
     {
         try
         {
-            var patient = await patientService.GetByIdAsync(id);
-
-
+            var patient = await _patientService.GetByIdAsync(id);
             if (patient is null)
             {
                 return NotFound();
             }
 
+            var notesResponse = await _notesApi.GetFromJsonAsync<IEnumerable<NoteResponse>>($"notes/{id}");
 
-            return Ok(patient.ToResponse());
+            var notes = notesResponse?.ToArray() ?? [];
+
+
+            var diabeteRisk = DiabetesRisk.None;
+
+            if (notes.Length > 0)
+            {
+                var reportRequest = new DiabetesReportRequest {
+                    Age = CalculateAge(patient.BirthDate),
+                    Gender = patient.Gender,
+                    Notes = notes.Select(n => n.Note).ToArray()
+                };
+                var reportResponse = await _reportApi.PostAsJsonAsync($"", reportRequest);
+
+                if (reportResponse.IsSuccessStatusCode)
+                {
+                    var report = await reportResponse.Content.ReadFromJsonAsync<DiabetesReportResponse>();
+                    if (report is not null)
+                    {
+                        diabeteRisk = report.Result;
+                    }
+                }
+            }
+
+            var response = new PatientInfoResponse
+            {
+                Id = patient.Id,
+                Firstname = patient.Firstname,
+                Lastname = patient.Lastname,
+                Gender = patient.Gender,
+                BirthDate = patient.BirthDate,
+                PostalAddress = patient.PostalAddress,
+                PhoneNumber = patient.PhoneNumber,
+                DiabetesRisk = diabeteRisk,
+                Notes = notes,
+            };
+
+            return Ok(response);
         }
         catch (Exception)
         {
@@ -62,7 +112,7 @@ public class PatientsController(PatientService patientService) : ControllerBase
 
             var patient = request.ToPatient();
 
-            var result = await patientService.CreateAsync(patient);
+            var result = await _patientService.CreateAsync(patient);
             if (result == false)
             {
                 return StatusCode(500);
@@ -87,7 +137,7 @@ public class PatientsController(PatientService patientService) : ControllerBase
             }
 
             var patient = model.MapToPatient(id);
-            var result = await patientService.UpdateAsync(patient);
+            var result = await _patientService.UpdateAsync(patient);
             if (result is null)
             {
                 return NotFound();
@@ -107,17 +157,30 @@ public class PatientsController(PatientService patientService) : ControllerBase
     {
         try
         {
-            if (await patientService.ExistAsync(id) == false)
+            if (await _patientService.ExistAsync(id) == false)
             {
                 return NotFound();
             }
 
-            bool deleted = await patientService.DeleteAsync(id);
+            bool deleted = await _patientService.DeleteAsync(id);
             return deleted ? NoContent() : NotFound();
         }
         catch (Exception)
         {
             return StatusCode(500);
         }
+    }
+    // Helper method to compute age from DateOnly birthDate
+    private static int CalculateAge(DateOnly birthDate)
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        int age = today.Year - birthDate.Year;
+
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (birthDate > today.AddYears(-age))
+        {
+            age--;
+        }
+        return age;
     }
 }

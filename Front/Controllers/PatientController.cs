@@ -55,14 +55,13 @@ public class PatientController : Controller
         patientsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
         notesApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-        var patient = await patientsApi.GetFromJsonAsync<PatientApi.Models.Responses.PatientResponse>($"patients/{id}");
+        var response = await patientsApi.GetFromJsonAsync<PatientInfoResponse>($"patients/{id}");
+        if (response is null)
+        {
+            return NotFound();
+        }
 
-        //if (patient is not null && notes is not null)
-        //{
-        //    return View(patient.MapToViewModel(notes));
-        //}
-
-        return NotFound();
+        return View(response);
     }
 
     [HttpGet("/patients/create")]
