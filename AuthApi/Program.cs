@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Home"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
