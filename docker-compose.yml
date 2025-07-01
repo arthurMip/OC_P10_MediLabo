@@ -1,48 +1,34 @@
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
     environment:
+      - SA_PASSWORD=Your_password123!
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=Kyn(JY2f59{!
     ports:
       - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
     networks:
-      - backend
+      - appnetwork
 
-  api:
-    build: ./AuthApi
+  webapi:
+    build:
+      context: ./Back
+      dockerfile: Dockerfile
+    container_name: patientapi
     depends_on:
       - sqlserver
     environment:
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=UserDatabase;User Id=sa;Password=Kyn(JY2f59{!;
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=PatientDB;User Id=sa;Password=Your_password123!;TrustServerCertificate=True;
     ports:
-      - "5000:80"
+      - "5000:8080"
     networks:
-      - backend
+      - appnetwork
 
-  mongo:
-    image: mongo
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
-
-  gateway:
-    build:
-      context: ./Gateway
-      dockerfile: Dockerfile
-    ports:
-      - "7001:8080"
-      - "7000:8081"
-
-  frontend:
-    build:
-      context: ./Front
-      dockerfile: Dockerfile
-    ports:
-      - "8001:8080"
-      - "8000:8081"
+volumes:
+  sql_data:
 
 networks:
-  backend:
+  appnetwork:
