@@ -58,11 +58,17 @@ builder.Services.AddScoped<PatientService>();
 var app = builder.Build();
 
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//    db.Database.EnsureCreated();
-//}
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.Migrate();
+    }
+    catch (Exception)
+    {
+    }
+}
 
 
 // Configure the HTTP request pipeline.

@@ -1,8 +1,6 @@
 # Use the official .NET SDK to build the app
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
 
 # Copy project files and restore dependencies
 COPY *.csproj ./
@@ -18,5 +16,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Expose port the app will run on
+EXPOSE 8080
+EXPOSE 8081
 
 ENTRYPOINT ["dotnet", "PatientApi.dll"]
