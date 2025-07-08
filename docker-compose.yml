@@ -3,27 +3,12 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
     environment:
-      - SA_PASSWORD=Your_password123!
-      - ACCEPT_EULA=Y
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
     volumes:
       - sql_data:/var/opt/mssql
-    networks:
-      - appnetwork
-
-  patientapi:
-    build:
-      context: ./Back
-      dockerfile: Dockerfile
-    container_name: patientapi
-    depends_on:
-      - sqlserver
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=PatientDB;User Id=sa;Password=Your_password123!;TrustServerCertificate=True;
-    ports:
-      - "5000:8080"
     networks:
       - appnetwork
 
@@ -35,10 +20,31 @@ services:
     depends_on:
       - sqlserver
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=AuthDB;User Id=sa;Password=Your_password123!;TrustServerCertificate=True;
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=AuthDB;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
     ports:
       - "5001:8080"
+    networks:
+      - appnetwork
+
+  patientapi:
+    build:
+      context: ./Back
+      dockerfile: Dockerfile
+    container_name: patientapi
+    depends_on:
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=PatientDB;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+    ports:
+      - "5000:8080"
     networks:
       - appnetwork
 
@@ -51,8 +57,9 @@ services:
       - patientapi
       - authapi
     environment:
-      - PATIENT_API_URL=http://patientapi:8080/api
-      - AUTH_API_URL=http://authapi:8080/api
+      ASPNETCORE_ENVIRONMENT: "Development"
+      URL__PATIENT_API: "http://patientapi:8080/api"
+      URL__AUTH_API: "http://authapi:8080/api"
     ports:
       - "5002:8080"
     networks:

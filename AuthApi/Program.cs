@@ -51,17 +51,13 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-        db.Database.Migrate();
+        db.Database.EnsureCreated();
+        //db.Database.Migrate();
     }
-    catch (Exception)
+    catch (Exception ex)
     {
+        Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
     }
-}
-
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-    db.Database.Migrate();
 }
 
 
@@ -78,6 +74,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await app.SeedTestUsersAsync();
+try
+{
+    await app.SeedTestUsersAsync();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error seeding test users: {ex.Message}");
+}
 
 app.Run();
