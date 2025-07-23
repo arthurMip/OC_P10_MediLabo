@@ -10,14 +10,16 @@ var urlConfigs= builder.Configuration.GetSection("URL");
 builder.Services.AddHttpClient("auth_api", client =>
 {
     //client.BaseAddress = new Uri("https://localhost:7000/api/auth");
+    Console.WriteLine($"AUTH API URL: {urlConfigs["AUTH_API"]!}");
     client.BaseAddress = new Uri(urlConfigs["AUTH_API"]!);
 
 });
 
 builder.Services.AddHttpClient("patients_api", client =>
 {
-    //client.BaseAddress = new Uri("https://localhost:7000/api/patients");
-    client.BaseAddress = new Uri(urlConfigs["PATIENT_API"]!);
+    //Console.WriteLine($"PATIENT API URL: {urlConfigs["PATIENT_API"]!}");
+    //client.BaseAddress = new Uri(urlConfigs["PATIENT_API"]!);
+    client.BaseAddress = new Uri("http://localhost:5000/api");
 });
 
 builder.Services.AddHttpClient("notes_api", client =>

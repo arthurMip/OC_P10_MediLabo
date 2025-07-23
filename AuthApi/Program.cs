@@ -10,6 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+int countdown = 20;
+for (int i = 0; i < countdown; i++)
+{
+    Console.WriteLine($"Start in: {countdown - i}");
+    await Task.Delay(TimeSpan.FromSeconds(1));
+}
+Console.WriteLine($"Starting...");
+
+
 builder.Services.AddDbContext<AuthDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -51,8 +60,9 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+        //db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
-        //db.Database.Migrate();
+        db.Database.Migrate();
     }
     catch (Exception ex)
     {

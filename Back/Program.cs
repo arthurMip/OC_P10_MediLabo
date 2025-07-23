@@ -10,6 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+int countdown = 20;
+for (int i = 0; i < countdown; i++)
+{
+    Console.WriteLine($"Start in: {countdown - i}");
+    await Task.Delay(TimeSpan.FromSeconds(1));
+}
+Console.WriteLine($"Starting...");
+
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

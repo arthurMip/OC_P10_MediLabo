@@ -21,7 +21,7 @@ services:
       - sqlserver
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=AuthDB;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=AuthDB;User Id=SA;Password=${SA_PASSWORD};TrustServerCertificate=True;"
       Jwt__Key: ${JWT_KEY}
       Jwt__Issuer: ${JWT_ISSUER}
       Jwt__Audience: ${JWT_AUDIENCE}
@@ -39,7 +39,7 @@ services:
       - sqlserver
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=PatientDB;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=PatientDB;User Id=SA;Password=${SA_PASSWORD};TrustServerCertificate=True;"
       Jwt__Key: ${JWT_KEY}
       Jwt__Issuer: ${JWT_ISSUER}
       Jwt__Audience: ${JWT_AUDIENCE}

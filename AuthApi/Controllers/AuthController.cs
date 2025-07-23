@@ -31,6 +31,7 @@ public class AuthController : ControllerBase
         }
 
         var token = GenerateJwtToken(user);
+        Console.WriteLine($"TOKEN: {token}");
         return Ok(token);
     }
 

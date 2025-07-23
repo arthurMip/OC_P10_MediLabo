@@ -9,7 +9,7 @@ using Front.Models.Responses;
 
 namespace Front.Controllers;
 
-[Authorize]
+//[Authorize]
 public class PatientController : Controller
 {
     private readonly HttpClient patientsApi;
@@ -26,25 +26,33 @@ public class PatientController : Controller
     {
         try
         {
-            var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
-            patientsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            //var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
+            //patientsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-            var patients = await patientsApi.GetFromJsonAsync<IEnumerable<PatientResponse>>("patients");
+            //var patients = await patientsApi.GetFromJsonAsync<PatientResponse[]>("patients");
+
+            var client = new HttpClient();
+
+            var patients = await client.GetFromJsonAsync<PatientResponse[]>("http://patientapi:8080/api/patients");
+
+            Console.WriteLine($"Patietns: {patients?.Length}");
+
 
             if (patients is not null)
             {
                 return View(patients);
             }
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-
+            Console.WriteLine(ex.Message);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
         }
 
-        return View(Array.Empty<PatientListItemViewModel>());
+        return View(Array.Empty<PatientResponse>());
     }
 
 
