@@ -65,6 +65,22 @@ services:
     networks:
       - appnetwork
 
+  gateway:
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    container_name: gateway
+    depends_on:
+      - frontend
+      - patientapi
+      - authapi
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "5003:8080"
+    networks:
+      - appnetwork
+
 volumes:
   sql_data:
 
