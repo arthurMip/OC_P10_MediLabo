@@ -29,11 +29,12 @@ public class PatientController : Controller
             //var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
             //patientsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-            //var patients = await patientsApi.GetFromJsonAsync<PatientResponse[]>("patients");
+            //var client = new HttpClient();
+            //var patients = await client.GetFromJsonAsync<PatientResponse[]>("http://gateway:8080/api/patients");
 
-            var client = new HttpClient();
+            Console.WriteLine("BaseAddress: " + patientsApi.BaseAddress);
 
-            var patients = await client.GetFromJsonAsync<PatientResponse[]>("http://gateway:8080/api/patients");
+            var patients = await patientsApi.GetFromJsonAsync<PatientResponse[]>("/patients");
 
             Console.WriteLine($"Patietns: {patients?.Length}");
 

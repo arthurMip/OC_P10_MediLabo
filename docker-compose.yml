@@ -58,7 +58,7 @@ services:
       - authapi
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      URL__PATIENT_API: "http://patientapi:8080/api"
+      URL__PATIENT_API: "http://gateway:8080/api"
       URL__AUTH_API: "http://authapi:8080/api"
     ports:
       - "5002:8080"

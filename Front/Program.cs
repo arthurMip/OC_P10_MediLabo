@@ -19,12 +19,12 @@ builder.Services.AddHttpClient("patients_api", client =>
 {
     //Console.WriteLine($"PATIENT API URL: {urlConfigs["PATIENT_API"]!}");
     //client.BaseAddress = new Uri(urlConfigs["PATIENT_API"]!);
-    client.BaseAddress = new Uri("http://localhost:5000/api");
+    client.BaseAddress = new Uri("http://gateway:8080");
 });
 
 builder.Services.AddHttpClient("notes_api", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7000/api/notes");
+    client.BaseAddress = new Uri("http://gateway:8080");
 });
 
 
