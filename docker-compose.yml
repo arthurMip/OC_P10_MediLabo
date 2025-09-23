@@ -12,6 +12,17 @@ services:
     networks:
       - appnetwork
 
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    networks:
+      - networkName
+
   authapi:
     build:
       context: ./AuthApi
@@ -43,10 +54,28 @@ services:
       Jwt__Key: ${JWT_KEY}
       Jwt__Issuer: ${JWT_ISSUER}
       Jwt__Audience: ${JWT_AUDIENCE}
+      URL__GATEWAY: "http://gateway:8080/api/"
     ports:
       - "5000:8080"
     networks:
       - appnetwork
+
+  noteapi:
+    build:
+      context: ./PatientNotesApi
+      dockerfile: Dockerfile
+    container_name: noteapi
+    depends_on:
+      - mongo
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+    ports:
+      - "6501:8080"
+    networks:
+      - networkName
 
   frontend:
     build:
@@ -58,7 +87,7 @@ services:
       - authapi
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      URL__PATIENT_API: "http://gateway:8080/api"
+      URL__GATEWAY: "http://gateway:8080/api/"
       URL__AUTH_API: "http://authapi:8080/api"
     ports:
       - "5002:8080"

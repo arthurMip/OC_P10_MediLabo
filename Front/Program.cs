@@ -15,16 +15,9 @@ builder.Services.AddHttpClient("auth_api", client =>
 
 });
 
-builder.Services.AddHttpClient("patients_api", client =>
+builder.Services.AddHttpClient("gateway", client =>
 {
-    //Console.WriteLine($"PATIENT API URL: {urlConfigs["PATIENT_API"]!}");
-    //client.BaseAddress = new Uri(urlConfigs["PATIENT_API"]!);
-    client.BaseAddress = new Uri("http://gateway:8080");
-});
-
-builder.Services.AddHttpClient("notes_api", client =>
-{
-    client.BaseAddress = new Uri("http://gateway:8080");
+    client.BaseAddress = new Uri(urlConfigs["GATEWAY"]!);
 });
 
 

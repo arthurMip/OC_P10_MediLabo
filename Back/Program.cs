@@ -27,12 +27,20 @@ builder.Services.AddOpenApi();
 Console.WriteLine("DefaultConnection: " + builder.Configuration.GetConnectionString("DefaultConnection"));
 
 
+
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.UseSeeding(SeedDatabase.SeedPatients);
 });
 
+var urlConfigs = builder.Configuration.GetSection("URL");
+
+builder.Services.AddHttpClient("gateway", client =>
+{
+    client.BaseAddress = new Uri(urlConfigs["GATEWAY"]!);
+});
 
 builder.Services.AddHttpClient("notes_api", client =>
 {

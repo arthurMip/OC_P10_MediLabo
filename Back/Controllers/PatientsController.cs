@@ -18,12 +18,14 @@ public class PatientsController : ControllerBase
     private readonly PatientService _patientService;
     private readonly HttpClient _notesApi;
     private readonly HttpClient _reportApi;
+    private readonly HttpClient _client;
+
 
 
     public PatientsController(PatientService patientService, IHttpClientFactory clientFactory)
     {
         _patientService = patientService;
-        _notesApi = clientFactory.CreateClient("notes_api");
+        _client = clientFactory.CreateClient("gateway");
         _reportApi = clientFactory.CreateClient("report_api");
     }
 
@@ -53,7 +55,7 @@ public class PatientsController : ControllerBase
                 return NotFound();
             }
 
-            var notesResponse = await _notesApi.GetFromJsonAsync<IEnumerable<NoteResponse>>($"notes/{id}");
+            var notesResponse = await _client.GetFromJsonAsync<IEnumerable<NoteResponse>>($"notes/{id}");
 
             var notes = notesResponse?.ToArray() ?? [];
 
