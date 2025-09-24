@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using PatientNotesApi.Database;
 using PatientNotesApi.Models.Requests;
 using PatientNotesApi.Services;
 
@@ -10,15 +12,27 @@ public class PatientNotesController(PatientNotesService patientNotesService) : C
 {
     private readonly PatientNotesService _patientNotesService = patientNotesService;
 
+    [HttpGet("test")]
+    public async Task<IActionResult> Test()
+    {
+        var allNotes = await _patientNotesService.GetAllAsync();
+
+        return Ok($"Patient Notes API is working!, total notes in db: {allNotes.Count}");
+
+
+
+    }
+
     [HttpGet("{patientId}")]
     public async Task<IActionResult> GetNotesByPatientId([FromRoute] int patientId)
     {
         try
         {
             var notes = await _patientNotesService.GetNotesByPatientIdAsync(patientId);
+
             return Ok(notes);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             return StatusCode(500);
         }

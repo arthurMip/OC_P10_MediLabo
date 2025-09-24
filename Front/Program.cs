@@ -9,8 +9,6 @@ var urlConfigs= builder.Configuration.GetSection("URL");
 
 builder.Services.AddHttpClient("auth_api", client =>
 {
-    //client.BaseAddress = new Uri("https://localhost:7000/api/auth");
-    Console.WriteLine($"AUTH API URL: {urlConfigs["AUTH_API"]!}");
     client.BaseAddress = new Uri(urlConfigs["AUTH_API"]!);
 
 });

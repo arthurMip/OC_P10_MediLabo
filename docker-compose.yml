@@ -21,7 +21,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
     networks:
-      - networkName
+      - appnetwork
 
   authapi:
     build:
@@ -75,7 +75,23 @@ services:
     ports:
       - "6501:8080"
     networks:
-      - networkName
+      - appnetwork
+
+  reportapi:
+    build:
+      context: ./DiabeteReportApi
+      dockerfile: Dockerfile
+    container_name: reportapi
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      URL__GATEWAY: "http://gateway:8080/api/"
+    ports:
+      - "6601:8080"
+    networks:
+      - appnetwork
 
   frontend:
     build:
@@ -88,7 +104,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       URL__GATEWAY: "http://gateway:8080/api/"
-      URL__AUTH_API: "http://authapi:8080/api"
+      URL__AUTH_API: "http://authapi:8080/api/"
     ports:
       - "5002:8080"
     networks:

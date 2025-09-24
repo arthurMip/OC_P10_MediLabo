@@ -27,8 +27,6 @@ builder.Services.AddOpenApi();
 Console.WriteLine("DefaultConnection: " + builder.Configuration.GetConnectionString("DefaultConnection"));
 
 
-
-
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -41,17 +39,6 @@ builder.Services.AddHttpClient("gateway", client =>
 {
     client.BaseAddress = new Uri(urlConfigs["GATEWAY"]!);
 });
-
-builder.Services.AddHttpClient("notes_api", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7000/api/notes");
-});
-
-builder.Services.AddHttpClient("report_api", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7000/api/diabetes-reports");
-});
-
 
 builder.Services.AddAuthentication(options =>
 {

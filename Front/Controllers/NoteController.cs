@@ -9,13 +9,18 @@ namespace Front.Controllers;
 [Authorize]
 public class NoteController : Controller
 {
-    private readonly HttpClient patientsApi;
-    private readonly HttpClient notesApi;
+    private readonly HttpClient _client;
 
     public NoteController(IHttpClientFactory clientFactory)
     {
-        patientsApi = clientFactory.CreateClient("patients_api");
-        notesApi = clientFactory.CreateClient("notes_api");
+        _client = clientFactory.CreateClient("gateway");
+    }
+
+    [HttpGet("/notes/test")]
+    public async Task<IActionResult> Test()
+    {
+        var result = await _client.GetStringAsync("notes/test");
+        return Ok($"<h1>{result}</h1>");
     }
 
 
@@ -37,8 +42,8 @@ public class NoteController : Controller
             return View(model);
         }
 
-        var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
-        notesApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        //var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
+        //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
         var request = new CreateNoteRequest
         {
@@ -46,7 +51,8 @@ public class NoteController : Controller
             Note = model.Note
         };
 
-        var response = await notesApi.PostAsJsonAsync($"notes", request);
+
+        var response = await _client.PostAsJsonAsync("notes", request);
 
         if (response.IsSuccessStatusCode)
         {

@@ -6,6 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 var config = builder.Configuration;
 
+int countdown = 20;
+for (int i = 0; i < countdown; i++)
+{
+    Console.WriteLine($"Start in: {countdown - i}");
+    await Task.Delay(TimeSpan.FromSeconds(1));
+}
+Console.WriteLine($"Starting...");
 
 // Add services to the container.
 builder.Services.AddControllers();

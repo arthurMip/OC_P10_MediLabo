@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Front.Controllers;
 
-//[Authorize]
+[Authorize]
 public class PatientController : Controller
 {
     private readonly HttpClient client;
@@ -18,6 +18,8 @@ public class PatientController : Controller
     public PatientController(IHttpClientFactory clientFactory)
     {
         client = clientFactory.CreateClient("gateway");
+
+
     }
 
     [HttpGet("/patients")]
@@ -29,8 +31,6 @@ public class PatientController : Controller
             //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
             var patients = await client.GetFromJsonAsync<PatientResponse[]>("patients");
-
-            Console.WriteLine($"patients: {patients?.Length}");
 
 
             if (patients is not null)
@@ -68,7 +68,6 @@ public class PatientController : Controller
         }
         catch (Exception ex)
         {
-            throw ex;
             Console.WriteLine(ex.Message);
             return StatusCode(500);
         }

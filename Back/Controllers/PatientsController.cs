@@ -16,8 +16,6 @@ namespace PatientApi.Controllers;
 public class PatientsController : ControllerBase
 {
     private readonly PatientService _patientService;
-    private readonly HttpClient _notesApi;
-    private readonly HttpClient _reportApi;
     private readonly HttpClient _client;
 
 
@@ -26,7 +24,6 @@ public class PatientsController : ControllerBase
     {
         _patientService = patientService;
         _client = clientFactory.CreateClient("gateway");
-        _reportApi = clientFactory.CreateClient("report_api");
     }
 
     [HttpGet]
@@ -55,9 +52,9 @@ public class PatientsController : ControllerBase
                 return NotFound();
             }
 
-            var notesResponse = await _client.GetFromJsonAsync<IEnumerable<NoteResponse>>($"notes/{id}");
+            var notesResponse = await _client.GetFromJsonAsync<NoteResponse[]>($"notes/{id}");
 
-            var notes = notesResponse?.ToArray() ?? [];
+            var notes = notesResponse ?? [];
 
 
             var diabeteRisk = DiabetesRisk.None;
@@ -69,7 +66,7 @@ public class PatientsController : ControllerBase
                     Gender = patient.Gender,
                     Notes = notes.Select(n => n.Note).ToArray()
                 };
-                var reportResponse = await _reportApi.PostAsJsonAsync($"", reportRequest);
+                var reportResponse = await _client.PostAsJsonAsync("diabetes-reports", reportRequest);
 
                 if (reportResponse.IsSuccessStatusCode)
                 {

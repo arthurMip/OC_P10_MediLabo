@@ -50,14 +50,14 @@
         {
             "UpstreamPathTemplate": "/api/diabetes-reports",
             "DownstreamPathTemplate": "/api/diabetes-reports",
-            "DownstreamScheme": "https",
+            "DownstreamScheme": "http",
             "UpstreamHttpMethod": [
                 "POST"
             ],
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 6600
+                    "Host": "reportapi",
+                    "Port": 8080
                 }
             ]
         }

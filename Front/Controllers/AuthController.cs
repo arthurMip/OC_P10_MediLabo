@@ -1,11 +1,13 @@
 ﻿using Front.ViewModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Front.Controllers;
 
+[AllowAnonymous]
 public class AuthController : Controller
 {
     private readonly IHttpClientFactory clientFactory;
