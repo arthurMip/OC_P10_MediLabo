@@ -7,31 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace Front.Controllers;
 
 [Authorize]
-public class NoteController : Controller
+public class NoteController(IHttpClientFactory clientFactory) : Controller
 {
-    private readonly HttpClient _client;
-
-    public NoteController(IHttpClientFactory clientFactory)
-    {
-        _client = clientFactory.CreateClient("gateway");
-    }
+    private readonly HttpClient _client = clientFactory.CreateClient("gateway");
 
     [HttpGet("/notes/test")]
     public async Task<IActionResult> Test()
     {
         var result = await _client.GetStringAsync("notes/test");
-        return Ok($"<h1>{result}</h1>");
+        return Ok(result);
     }
 
 
     [HttpGet("/notes/{patientId}/create")]
     public IActionResult Create([FromRoute] int patientId)
     {
-        var viewModel = new CreateNoteViewModel
-        {
-            PatientId = patientId
-        };
-        return View(viewModel);
+        return View(new CreateNoteViewModel { PatientId = patientId });
     }
 
     [HttpPost("/notes/{patientId}/create")]
@@ -42,8 +33,8 @@ public class NoteController : Controller
             return View(model);
         }
 
-        //var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
-        //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        var jwt = Request.Cookies.FirstOrDefault(c => c.Key == "jwt").Value;
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
         var request = new CreateNoteRequest
         {
@@ -51,14 +42,12 @@ public class NoteController : Controller
             Note = model.Note
         };
 
-
         var response = await _client.PostAsJsonAsync("notes", request);
-
-        if (response.IsSuccessStatusCode)
+        if (!response.IsSuccessStatusCode)
         {
-            return RedirectToAction("Infos", "Patient", new { id = patientId });
+            ModelState.AddModelError(string.Empty, "An error occurred while creating the note.");
+            return View(model);
         }
-        ModelState.AddModelError(string.Empty, "An error occurred while creating the note.");
-        return View(model);
+        return RedirectToAction("Infos", "Patient", new { id = patientId });
     }
 }

@@ -26,9 +26,7 @@ public class PatientService(AppDbContext context)
     {
         await context.Patients.AddAsync(patient);
 
-        var result = await context.SaveChangesAsync();
-
-        return result > 0;
+        return await context.SaveChangesAsync() > 0;
     }
 
     public async Task<Patient?> UpdateAsync(Patient patient)

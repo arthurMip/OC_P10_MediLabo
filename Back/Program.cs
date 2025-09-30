@@ -1,5 +1,4 @@
 using PatientApi.Data;
-using PatientApi.Data.Entities;
 using PatientApi.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,7 +19,6 @@ Console.WriteLine($"Starting...");
 
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 
@@ -62,9 +60,7 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddScoped<PatientService>();
-
 var app = builder.Build();
-
 
 using (var scope = app.Services.CreateScope())
 {

@@ -1,9 +1,8 @@
-﻿using System.Threading.Tasks;
-using DiabeteReportApi.Models.Requests;
+﻿using DiabeteReportApi.Models.Requests;
 using DiabeteReportApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
- namespace DiabeteReportApi.Controllers;
+namespace DiabetesReportApi.Controllers;
 
 [Route("api/diabetes-reports")]
 [ApiController]

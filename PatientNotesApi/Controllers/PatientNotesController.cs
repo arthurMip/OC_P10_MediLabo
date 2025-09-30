@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using PatientNotesApi.Database;
+﻿using Microsoft.AspNetCore.Mvc;
 using PatientNotesApi.Models.Requests;
 using PatientNotesApi.Services;
 
@@ -18,42 +16,20 @@ public class PatientNotesController(PatientNotesService patientNotesService) : C
         var allNotes = await _patientNotesService.GetAllAsync();
 
         return Ok($"Patient Notes API is working!, total notes in db: {allNotes.Count}");
-
-
-
     }
 
     [HttpGet("{patientId}")]
     public async Task<IActionResult> GetNotesByPatientId([FromRoute] int patientId)
     {
-        try
-        {
-            var notes = await _patientNotesService.GetNotesByPatientIdAsync(patientId);
-
-            return Ok(notes);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500);
-        }
+        var notes = await _patientNotesService.GetNotesByPatientIdAsync(patientId);
+        return Ok(notes);
     }
-
 
     [HttpPost]
     public async Task<IActionResult> CreateNote([FromBody] CreateNoteRequest request)
     {
-        try
-        {
-            var note = request.ToPatientNote();
-
-            await _patientNotesService.CreateNoteAsync(note);
-
-            return Ok();
-
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
+        var note = request.ToPatientNote();
+        await _patientNotesService.CreateNoteAsync(note);
+        return Ok();
     }
 }

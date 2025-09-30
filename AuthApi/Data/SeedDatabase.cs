@@ -1,9 +1,6 @@
-﻿using AuthApi.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace PatientApi.Data;
-
+namespace AuthApi.Data;
 public static class SeedDatabaseExtensions
 {
     public static async Task SeedTestUsersAsync(this IHost host)

@@ -8,14 +8,9 @@ using System.Security.Claims;
 namespace Front.Controllers;
 
 [AllowAnonymous]
-public class AuthController : Controller
+public class AuthController(IHttpClientFactory clientFactory) : Controller
 {
-    private readonly IHttpClientFactory clientFactory;
-    public AuthController(IHttpClientFactory _clientFactory)
-    {
-        clientFactory = _clientFactory;
-    }
-
+    private readonly IHttpClientFactory _clientFactory = clientFactory;
 
     [HttpGet("/login")]
     public IActionResult Login()
@@ -32,30 +27,30 @@ public class AuthController : Controller
             return View(model);
         }
 
-        var httpClient = clientFactory.CreateClient("auth_api");
+        var client = _clientFactory.CreateClient("auth_api");
 
-        var response = await httpClient.PostAsJsonAsync("auth/login", model);
-        if (response.IsSuccessStatusCode)
+        var response = await client.PostAsJsonAsync("auth/login", model);
+        if (!response.IsSuccessStatusCode)
         {
-            var jwt = await response.Content.ReadAsStringAsync();
-
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(jwt);
-            var identity = new ClaimsIdentity(token.Claims, "Cookies");
-            var principal = new ClaimsPrincipal(identity);
-            await HttpContext.SignInAsync("Cookies", principal);
-
-            Response.Cookies.Append("jwt", jwt, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict
-            });
-
-            return RedirectToAction("Index", "Patient");
+            ModelState.AddModelError(string.Empty, "Tentative de connexion invalide.");
+            return View(model);
         }
 
-        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        return View(model);
+        var jwt = await response.Content.ReadAsStringAsync();
+
+        var handler = new JwtSecurityTokenHandler();
+        var token = handler.ReadJwtToken(jwt);
+        var identity = new ClaimsIdentity(token.Claims, "Cookies");
+        var principal = new ClaimsPrincipal(identity);
+        await HttpContext.SignInAsync("Cookies", principal);
+
+        Response.Cookies.Append("jwt", jwt, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict
+        });
+
+        return RedirectToAction("Index", "Patient");
     }
 }
