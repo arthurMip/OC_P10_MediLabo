@@ -3,7 +3,13 @@
     ViewData["Title"] = "Patients";
 }
 
-<a href="/patients/create" class="btn btn-primary">Add Patient</a>
+<h1>Liste des patients</h1>
+
+<br />
+
+<a href="/patients/create" class="btn btn-primary">Ajouter un patient</a>
+
+<hr />
 
 <div class="mt-4">
     @foreach (var patient in Model)
@@ -11,7 +17,7 @@
         <div>
             <p>Nom: @patient.Lastname</p>
             <p>Prénom: @patient.Firstname</p>
-            <a href="@($"/patients/{patient.Id}")">Voir informations</a>
+            <a href="@($"/patients/{patient.Id}")" class="btn btn-primary">Voir les informations</a>
         </div>
         <hr />
     }

@@ -2,6 +2,10 @@
 
 <h3>Patient Informations:</h3>
 
+<a href="/patients/update/@Model.Id" class="btn btn-primary">Mettre à jour les informations</a>
+
+<br />
+
 <div>
     <p>Nom: @Model.Lastname</p>
     <p>Prénom: @Model.Firstname</p>
@@ -12,7 +16,7 @@
 </div>
 
 <br/>
-
+<hr/>
 
 <h3>Risque de diabète:</h3>
 @if (Model.DiabetesRisk == DiabetesRisk.None)
@@ -33,10 +37,10 @@ else if (Model.DiabetesRisk == DiabetesRisk.EarlyOnset)
 }
 
 <br />
+<hr />
 
-
-<h3> Patient Notes:</h3>
-<a href="/notes/@Model.Id/create" class="btn btn-primary">Add Note</a>
+<h3>Patient Notes:</h3>
+<a href="/notes/@Model.Id/create" class="btn btn-primary">Ajouter une note</a>
 
 @if (Model.Notes.Any())
 {
