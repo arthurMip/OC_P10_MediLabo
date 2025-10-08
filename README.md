@@ -13,3 +13,12 @@ installé et en fonctionnement
 ```bash
 docker-compose up --build  --remove-orphans
 ```
+
+## Ouvrir l'application
+
+Url: http://localhost:5002/
+
+## Login
+
+Email: user1@medilabo.com
+Password: Password123!
