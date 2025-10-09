@@ -22,3 +22,10 @@ Url: http://localhost:5002/
 
 Email: user1@medilabo.com
 Password: Password123!
+
+## Recommandations d’amélioration Green Code
+
+- Sur Docker, fixer une limite sur le CPU/RAM pour limiter les ressources physiques
+- Utiliser du code asynchrone pour de meilleures performances
+- Mettre en place un cache pour éviter les traitements répétés.
+- Réduire le nombre de services
